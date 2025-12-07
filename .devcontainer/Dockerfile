@@ -5,11 +5,13 @@ ARG USERNAME=uonoko
 ARG USER_UID=1000
 ARG USER_GID=1000
 
-RUN groupadd --gid $USER_GID $USERNAME \
+# 既存のGID/UIDがある場合は削除してから作成
+RUN (getent group $USER_GID && groupmod -n $USERNAME $(getent group $USER_GID | cut -d: -f1) || groupadd --gid $USER_GID $USERNAME) \
+    && (id -u $USER_UID >/dev/null 2>&1 && userdel $(id -nu $USER_UID) || true) \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && apt-get update \
     && apt-get install -y sudo \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Node.js と sbt インストール
@@ -45,9 +47,9 @@ ENV PATH="/opt/mat:${PATH}"
 
 # ホストと同じパス構造を作成し、ユーザーに権限を付与
 RUN mkdir -p /home/uonoko/Development/blog/dump-file \
-    && chown -R uonoko:uonoko /home/uonoko
+    && chown -R $USERNAME:$USERNAME /home/$USERNAME
 
 WORKDIR /home/uonoko/Development/blog/dump-file
 
 # デフォルトユーザーを設定
-USER uonoko
+USER $USERNAME
