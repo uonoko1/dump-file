@@ -1,0 +1,30 @@
+{
+  "name": "Scala Heap Demo",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "mounts": [
+    {
+      "source": "${localEnv:HOME}/.claude",
+      "target": "/home/uonoko/.claude",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:HOME}/.claude.json",
+      "target": "/home/uonoko/.claude.json",
+      "type": "bind"
+    }
+  ],
+  "workspaceMount": "source=${localWorkspaceFolder},target=/home/uonoko/Development/blog/dump-file,type=bind",
+  "workspaceFolder": "/home/uonoko/Development/blog/dump-file",
+  "forwardPorts": [8080],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "scala-lang.scala",
+        "scalameta.metals"
+      ]
+    }
+  },
+  "remoteUser": "uonoko"
+}

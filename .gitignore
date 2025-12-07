@@ -1,0 +1,31 @@
+# ヒープダンプファイル（サイズが大きい）
+*.hprof
+
+# Eclipse MAT のインデックスファイル
+*.index
+*.threads
+
+# 解凍したレポート（ZIP から再生成可能）
+leak_reports/
+
+# sbt / Scala
+target/
+.bloop/
+.bsp/
+.metals/
+project/target/
+project/project/
+
+# IDE
+.idea/
+# .vscode/  # チームで設定を共有したい場合はコメントアウトのまま
+
+# Metals（Scala LSP キャッシュ、常に除外）
+.metals/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ログファイル
+*.log
